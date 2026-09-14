@@ -1,0 +1,164 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-border: var(--sidebar-border);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-pending: var(--pending);
+  --color-pending-foreground: var(--pending-foreground);
+}
+
+:root {
+  --radius: 0.625rem;
+
+  --background: oklch(0.985 0.005 250);
+  --foreground: oklch(0.18 0.03 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.03 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.03 260);
+
+  --primary: oklch(0.32 0.09 255);
+  --primary-foreground: oklch(0.99 0.005 250);
+  --secondary: oklch(0.955 0.01 250);
+  --secondary-foreground: oklch(0.2 0.04 260);
+  --muted: oklch(0.955 0.008 250);
+  --muted-foreground: oklch(0.5 0.02 260);
+  --accent: oklch(0.94 0.02 250);
+  --accent-foreground: oklch(0.2 0.04 260);
+  --destructive: oklch(0.58 0.22 27);
+  --destructive-foreground: oklch(0.99 0.005 250);
+  --border: oklch(0.9 0.01 250);
+  --input: oklch(0.92 0.01 250);
+  --ring: oklch(0.55 0.09 255);
+
+  --sidebar: oklch(0.19 0.04 260);
+  --sidebar-foreground: oklch(0.92 0.01 250);
+  --sidebar-accent: oklch(0.26 0.05 260);
+  --sidebar-border: oklch(0.28 0.04 260);
+
+  /* Semantic status colors */
+  --success: oklch(0.65 0.16 145);
+  --success-foreground: oklch(0.99 0 0);
+  --warning: oklch(0.82 0.14 85);
+  --warning-foreground: oklch(0.25 0.05 60);
+  --pending: oklch(0.72 0.17 55);
+  --pending-foreground: oklch(0.99 0 0);
+  --danger: oklch(0.58 0.22 27);
+  --danger-foreground: oklch(0.99 0 0);
+  --info: oklch(0.6 0.14 240);
+  --info-foreground: oklch(0.99 0 0);
+}
+
+.dark {
+  --background: oklch(0.15 0.02 260);
+  --foreground: oklch(0.95 0.01 250);
+  --card: oklch(0.2 0.03 260);
+  --card-foreground: oklch(0.95 0.01 250);
+  --border: oklch(0.3 0.03 260);
+  --input: oklch(0.28 0.03 260);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html, body, button, input, select, textarea {
+    font-family: "Manrope", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-feature-settings: "ss01","ss02";
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'%3E%3Ccircle cx='7' cy='7' r='5' fill='%23020713' fill-opacity='.88'/%3E%3Ccircle cx='7' cy='7' r='2.2' fill='%2367e8f9'/%3E%3C/svg%3E") 7 7, auto;
+  }
+
+  a, button, select, [role="button"] {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Ccircle cx='10' cy='10' r='8' fill='%23020713' fill-opacity='.78' stroke='%2367e8f9' stroke-width='1.5'/%3E%3Ccircle cx='10' cy='10' r='2.4' fill='%2367e8f9'/%3E%3C/svg%3E") 10 10, pointer;
+  }
+
+  input, textarea, [contenteditable="true"] { cursor: text; }
+}
+
+@utility band-green { background-color: color-mix(in oklab, var(--success) 15%, transparent); color: var(--success); }
+@utility band-green-strong { background-color: color-mix(in oklab, var(--success) 32%, transparent); color: oklch(0.32 0.14 145); font-weight: 600; }
+@utility band-green-soft { background-color: color-mix(in oklab, var(--success) 10%, transparent); color: oklch(0.42 0.12 145); }
+@utility band-amber { background-color: color-mix(in oklab, var(--warning) 20%, transparent); color: oklch(0.35 0.09 60); }
+@utility band-orange { background-color: color-mix(in oklab, var(--pending) 18%, transparent); color: oklch(0.4 0.15 45); }
+@utility band-red { background-color: color-mix(in oklab, var(--danger) 15%, transparent); color: var(--danger); }
+@utility band-pink { background-color: color-mix(in oklab, var(--danger) 22%, oklch(0.95 0.03 20)); color: oklch(0.4 0.18 20); }
+@utility band-grey { background-color: color-mix(in oklab, var(--muted-foreground) 15%, transparent); color: var(--muted-foreground); }
+@utility band-blue { background-color: color-mix(in oklab, var(--info) 15%, transparent); color: var(--info); }
+
+@media (min-width: 1024px) {
+  .spotlight-group:has(.spotlight-item:hover) .spotlight-item {
+    transition: filter 180ms ease, opacity 180ms ease, transform 180ms ease, border-color 180ms ease;
+  }
+
+  .spotlight-group:has(.spotlight-item:hover) .spotlight-item:not(:hover) {
+    filter: blur(0.55px) brightness(0.82);
+    opacity: 0.72;
+  }
+
+  .spotlight-group:has(.spotlight-item:hover) .spotlight-item:hover {
+    position: relative;
+    z-index: 50;
+    filter: none;
+    opacity: 1;
+  }
+
+  .spotlight-item:hover {
+    position: relative;
+    z-index: 50;
+    transform: scale(1.045);
+    box-shadow: 0 16px 36px rgb(2 7 19 / 0.16);
+  }
+
+  .spotlight-focus {
+    transform-origin: center;
+    transition: filter 180ms ease, opacity 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+  }
+
+  .spotlight-focus:hover {
+    position: relative;
+    z-index: 50;
+    transform: scale(1.07);
+    box-shadow: 0 22px 48px rgb(2 7 19 / 0.22);
+  }
+}
