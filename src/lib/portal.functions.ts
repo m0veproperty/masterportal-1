@@ -18,7 +18,7 @@ export const getDashboard = createServerFn({ method: "GET" }).handler(async () =
   const sb = admin();
 
   const [{ data: websites }, { data: audit }, { count: premiumDomainsCount }] = await Promise.all([
-    sb.from("websites").select("id,name,url,category,server_label,importance_score,uses_wordpress,updated_at").eq("status", "active"),
+    sb.from("websites").select("id,name,url,category,server_label,importance_score,uses_wordpress,updated_at,status").neq("status", "archived"),
     sb.from("audit_log").select("id,action,summary,created_at,website_id").order("created_at", { ascending: false }).limit(30),
     sb.from("premium_domains").select("id", { count: "exact", head: true }).eq("active", true),
   ]);
@@ -114,7 +114,20 @@ export const listWebsites = createServerFn({ method: "GET" })
     const { data: rows } = await q;
     let list = rows ?? [];
     if (data.servers) {
-      list = list.filter((row) => data.servers!.includes(row.server_label ?? ""));
+      const defaultServers = ["ny2.wiwy.com", "ny1.wiwy.com", "da.wiwy.com", "External Server"];
+      const allDefaultServersSelected =
+        data.servers.length === defaultServers.length
+        && defaultServers.every((server) => data.servers!.includes(server));
+
+      // The default UI selection means "all servers". Do not turn that into
+      // a database value allowlist because imported MariaDB rows may contain a
+      // blank, new, or previously unseen server_label. Only filter when the
+      // user has deliberately narrowed the server selection.
+      if (!allDefaultServersSelected) {
+        list = data.servers.length === 0
+          ? []
+          : list.filter((row) => data.servers!.includes(row.server_label ?? ""));
+      }
     }
     if (data.priorities) {
       list = list.filter((row) => {

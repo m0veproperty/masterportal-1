@@ -43,7 +43,7 @@ export function AppShell({
         <div className="relative p-[10.8px] border-b border-sidebar-border flex items-center justify-between gap-[7.2px]">
           {!collapsed && (
             <img
-              src="https://mockup.wiwy.com/wp-content/uploads/2026/07/master-portal-logo.jpg"
+              src="/favicon.jpg"
               alt="Master Portal"
               className="h-36 w-36 rounded-[10.8px] object-cover shadow-lg mx-auto md:h-[14.85rem] md:w-[14.85rem]"
             />

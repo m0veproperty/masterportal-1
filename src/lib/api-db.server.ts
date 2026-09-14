@@ -49,7 +49,7 @@ async function requestApi<T>(body: Record<string, unknown>): Promise<T> {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        authorization: `Bearer ${secret}`,
+        "x-siteguard-key": secret,
         "user-agent": "SiteGuard-Vercel/1.0",
       },
       body: JSON.stringify(body),
@@ -179,17 +179,11 @@ class QueryBuilder implements PromiseLike<DbResult<any>> {
           head: this.headMode,
           single: this.singleMode,
         } satisfies QueryPayload,
-      })
-        .then((result) => ({
-          data: result.data ?? null,
-          count: result.count ?? null,
-          error: null,
-        }))
-        .catch((error: unknown) => ({
-          data: null,
-          count: null,
-          error: error instanceof Error ? error : new Error(String(error)),
-        }));
+      }).then((result) => ({
+        data: result.data ?? null,
+        count: result.count ?? null,
+        error: null,
+      }));
     }
     return this.executed;
   }
