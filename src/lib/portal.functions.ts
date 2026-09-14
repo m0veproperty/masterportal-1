@@ -12,6 +12,12 @@ async function db() {
   return admin();
 }
 
+export const getApiStatus = createServerFn({ method: "GET" }).handler(async () => {
+  await requireUnlocked();
+  const { diagnoseApi } = await import("./api-db.server");
+  return diagnoseApi();
+});
+
 export const getDashboard = createServerFn({ method: "GET" }).handler(async () => {
   await requireUnlocked();
   const { admin } = await import("./portal.server");

@@ -10,6 +10,7 @@ import {
   deleteCredential,
   deleteWebsite,
   getWebsiteFieldOptions,
+  getApiStatus,
   listWebsites,
   updateCredentialField,
   updateWebsiteField,
@@ -41,6 +42,13 @@ const fieldOptionsQuery = queryOptions({
   queryFn: () => getWebsiteFieldOptions(),
 });
 
+const apiStatusQuery = queryOptions({
+  queryKey: ["siteguard-api-status"],
+  queryFn: () => getApiStatus(),
+  staleTime: 30_000,
+  refetchInterval: 60_000,
+});
+
 export const Route = createFileRoute("/_gated/websites")({
   head: () => ({
     meta: [
@@ -53,17 +61,20 @@ export const Route = createFileRoute("/_gated/websites")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  loader: ({ context }) => Promise.all([
-    context.queryClient.ensureQueryData(listOpts(
-      "",
-      "all",
-      [...SERVER_OPTIONS],
-      ["very_high", "high", "mid", "low"],
-      ["wordpress", "non_wordpress"],
-      ["active"],
-    )),
-    context.queryClient.ensureQueryData(fieldOptionsQuery),
-  ]),
+  loader: async ({ context }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData(listOpts(
+        "",
+        "all",
+        [...SERVER_OPTIONS],
+        ["very_high", "high", "mid", "low"],
+        ["wordpress", "non_wordpress"],
+        ["active"],
+      )),
+      context.queryClient.ensureQueryData(fieldOptionsQuery),
+      context.queryClient.ensureQueryData(apiStatusQuery),
+    ]);
+  },
   component: WebsitesPage,
 });
 
@@ -1282,6 +1293,7 @@ function WebsitesPage() {
   const [priorityIndex, setPriorityIndex] = useState(0);
   const { data = [] } = useQuery(listOpts(q, cat, servers, priorities, wordpressTypes, activities));
   const { data: managedOptions = WEBSITE_FIELD_OPTION_DEFAULTS } = useQuery(fieldOptionsQuery);
+  const { data: apiStatus } = useQuery(apiStatusQuery);
   const qc = useQueryClient();
   const updateFn = useServerFn(updateWebsiteField);
   const updateOptionFn = useServerFn(updateWebsiteFieldOption);
@@ -1466,6 +1478,12 @@ function WebsitesPage() {
 
   return (
     <AppShell title="Websites" hideTitle>
+      {apiStatus && !apiStatus.ok && (
+        <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-300">
+          <div className="font-semibold">Database connection problem</div>
+          <div className="mt-1 break-words opacity-90">{apiStatus.message}</div>
+        </div>
+      )}
       <div className="relative isolate mb-5 overflow-hidden rounded-2xl border border-white/10 bg-[#0b1224] p-4 text-white shadow-[0_24px_60px_rgba(10,18,36,0.18)] md:p-5">
         <div
           aria-hidden="true"

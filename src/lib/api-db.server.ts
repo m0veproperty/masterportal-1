@@ -1,6 +1,7 @@
-// Server-only MariaDB API client.
+// Server only MariaDB API client.
 // The browser never receives SITEGUARD_API_SECRET. All calls originate from
 // TanStack Start server functions running on Vercel.
+import { createHash, createHmac } from "node:crypto";
 
 type Filter =
   | { op: "eq" | "neq"; column: string; value: unknown }
@@ -49,50 +50,69 @@ function apiConfig() {
   return { url: parsed.toString(), secret };
 }
 
-function encodeTransport(body: Record<string, unknown>, secret: string) {
-  // cPanel ModSecurity can reject JSON bodies containing database operation
-  // words before PHP receives the request. Send an opaque base64url payload
-  // as a conventional form POST instead. PHP decodes it after Apache accepts it.
-  const payload = Buffer.from(JSON.stringify(body), "utf8").toString("base64url");
-  return new URLSearchParams({ key: secret, payload }).toString();
+function encodeTransport(body: Record<string, unknown>) {
+  return Buffer.from(JSON.stringify(body), "utf8").toString("base64url");
+}
+
+function signedRequestUrl(url: string, payload: string, secret: string) {
+  const target = new URL(url);
+  const timestamp = Math.floor(Date.now() / 1000).toString();
+  const authKey = createHash("sha256").update(secret, "utf8").digest("hex");
+  const signature = createHmac("sha256", authKey)
+    .update(`${timestamp}.${payload}`, "utf8")
+    .digest("hex");
+  target.searchParams.set("t", timestamp);
+  target.searchParams.set("s", signature);
+  return target.toString();
+}
+
+function toError(error: unknown): Error {
+  return error instanceof Error ? error : new Error(String(error));
+}
+
+async function parseApiResponse<T>(response: Response): Promise<T> {
+  const text = await response.text();
+  let payload: unknown = null;
+  try {
+    payload = text ? JSON.parse(text) : null;
+  } catch {
+    const preview = text.replace(/\s+/g, " ").trim().slice(0, 180);
+    throw new Error(
+      preview
+        ? `SiteGuard API returned non JSON response (${response.status}): ${preview}`
+        : `SiteGuard API returned an empty non JSON response (${response.status})`,
+    );
+  }
+
+  if (!response.ok) {
+    const message =
+      payload && typeof payload === "object" && "error" in payload
+        ? String((payload as { error?: unknown }).error)
+        : `SiteGuard API request failed (${response.status})`;
+    throw new Error(message);
+  }
+
+  return payload as T;
 }
 
 async function requestApi<T>(body: Record<string, unknown>): Promise<T> {
   const { url, secret } = apiConfig();
+  const payload = encodeTransport(body);
+  const target = signedRequestUrl(url, payload, secret);
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 15_000);
   try {
-    const response = await fetch(url, {
+    const response = await fetch(target, {
       method: "POST",
       headers: {
-        "content-type": "application/x-www-form-urlencoded;charset=UTF-8",
-        "user-agent": "SiteGuard-Vercel/1.1",
+        accept: "application/json",
+        "content-type": "text/plain;charset=UTF-8",
       },
-      body: encodeTransport(body, secret),
+      body: payload,
       cache: "no-store",
       signal: controller.signal,
     });
-
-    const text = await response.text();
-    let payload: unknown = null;
-    try {
-      payload = text ? JSON.parse(text) : null;
-    } catch {
-      if (response.status === 403) {
-        throw new Error("SiteGuard API request was blocked by cPanel before PHP handled it (403)");
-      }
-      throw new Error(`SiteGuard API returned invalid JSON (${response.status})`);
-    }
-
-    if (!response.ok) {
-      const message =
-        payload && typeof payload === "object" && "error" in payload
-          ? String((payload as { error?: unknown }).error)
-          : `SiteGuard API request failed (${response.status})`;
-      throw new Error(message);
-    }
-
-    return payload as T;
+    return await parseApiResponse<T>(response);
   } catch (error) {
     if (error instanceof Error && error.name === "AbortError") {
       throw new Error("SiteGuard API timed out");
@@ -100,6 +120,52 @@ async function requestApi<T>(body: Record<string, unknown>): Promise<T> {
     throw error;
   } finally {
     clearTimeout(timer);
+  }
+}
+
+export async function diagnoseApi(): Promise<{
+  ok: boolean;
+  stage: "api" | "database" | "ready";
+  message: string;
+  version?: string;
+}> {
+  let config: ReturnType<typeof apiConfig>;
+  try {
+    config = apiConfig();
+  } catch (error) {
+    return { ok: false, stage: "api", message: toError(error).message };
+  }
+
+  try {
+    const pingUrl = new URL(config.url);
+    pingUrl.searchParams.set("ping", "1");
+    const response = await fetch(pingUrl, {
+      method: "GET",
+      headers: { accept: "application/json" },
+      cache: "no-store",
+      signal: AbortSignal.timeout(10_000),
+    });
+    const ping = await parseApiResponse<{ ok?: boolean; version?: string }>(response);
+    if (!ping?.ok) {
+      return { ok: false, stage: "api", message: "The PHP API did not answer its health probe" };
+    }
+
+    try {
+      const database = await requestApi<{ ok?: boolean; database?: string }>({ action: "health" });
+      if (database?.ok && database.database === "connected") {
+        return {
+          ok: true,
+          stage: "ready",
+          message: "PHP API and MariaDB are connected",
+          version: ping.version,
+        };
+      }
+      return { ok: false, stage: "database", message: "PHP API answered but MariaDB health check failed", version: ping.version };
+    } catch (error) {
+      return { ok: false, stage: "database", message: toError(error).message, version: ping.version };
+    }
+  } catch (error) {
+    return { ok: false, stage: "api", message: toError(error).message };
   }
 }
 
@@ -198,11 +264,17 @@ class QueryBuilder implements PromiseLike<DbResult<any>> {
           head: this.headMode,
           single: this.singleMode,
         } satisfies QueryPayload,
-      }).then((result) => ({
-        data: result.data ?? null,
-        count: result.count ?? null,
-        error: null,
-      }));
+      })
+        .then((result) => ({
+          data: result.data ?? null,
+          count: result.count ?? null,
+          error: null,
+        }))
+        .catch((error) => ({
+          data: null,
+          count: null,
+          error: toError(error),
+        }));
     }
     return this.executed;
   }
