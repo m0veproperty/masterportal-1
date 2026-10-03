@@ -9,49 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as GatedRouteImport } from './routes/_gated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as GatedWebsitesRouteImport } from './routes/_gated/websites'
-import { Route as GatedSpreadsheetsRouteImport } from './routes/_gated/spreadsheets'
-import { Route as GatedRemindersRouteImport } from './routes/_gated/reminders'
-import { Route as GatedPremiumRouteImport } from './routes/_gated/premium'
-import { Route as GatedGeneralCredentialsRouteImport } from './routes/_gated/general-credentials'
-import { Route as GatedDashboardRouteImport } from './routes/_gated/dashboard'
+import { Route as GatedRouteImport } from './routes/_gated'
 import { Route as GatedAuditRouteImport } from './routes/_gated/audit'
+import { Route as GatedDashboardRouteImport } from './routes/_gated/dashboard'
+import { Route as GatedGeneralCredentialsRouteImport } from './routes/_gated/general-credentials'
+import { Route as GatedPremiumRouteImport } from './routes/_gated/premium'
+import { Route as GatedRemindersRouteImport } from './routes/_gated/reminders'
+import { Route as GatedSpreadsheetsRouteImport } from './routes/_gated/spreadsheets'
+import { Route as GatedVercelGithubReposRouteImport } from './routes/_gated/vercel-github-repos'
+import { Route as GatedWebsitesRouteImport } from './routes/_gated/websites'
 import { Route as GatedWebsitesIdRouteImport } from './routes/_gated/websites.$id'
 
-const GatedRoute = GatedRouteImport.update({
-  id: '/_gated',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GatedWebsitesRoute = GatedWebsitesRouteImport.update({
-  id: '/websites',
-  path: '/websites',
-  getParentRoute: () => GatedRoute,
+const GatedRoute = GatedRouteImport.update({
+  id: '/_gated',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const GatedSpreadsheetsRoute = GatedSpreadsheetsRouteImport.update({
-  id: '/spreadsheets',
-  path: '/spreadsheets',
-  getParentRoute: () => GatedRoute,
-} as any)
-const GatedRemindersRoute = GatedRemindersRouteImport.update({
-  id: '/reminders',
-  path: '/reminders',
-  getParentRoute: () => GatedRoute,
-} as any)
-const GatedPremiumRoute = GatedPremiumRouteImport.update({
-  id: '/premium',
-  path: '/premium',
-  getParentRoute: () => GatedRoute,
-} as any)
-const GatedGeneralCredentialsRoute = GatedGeneralCredentialsRouteImport.update({
-  id: '/general-credentials',
-  path: '/general-credentials',
+const GatedAuditRoute = GatedAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
   getParentRoute: () => GatedRoute,
 } as any)
 const GatedDashboardRoute = GatedDashboardRouteImport.update({
@@ -59,9 +40,34 @@ const GatedDashboardRoute = GatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => GatedRoute,
 } as any)
-const GatedAuditRoute = GatedAuditRouteImport.update({
-  id: '/audit',
-  path: '/audit',
+const GatedGeneralCredentialsRoute = GatedGeneralCredentialsRouteImport.update({
+  id: '/general-credentials',
+  path: '/general-credentials',
+  getParentRoute: () => GatedRoute,
+} as any)
+const GatedPremiumRoute = GatedPremiumRouteImport.update({
+  id: '/premium',
+  path: '/premium',
+  getParentRoute: () => GatedRoute,
+} as any)
+const GatedRemindersRoute = GatedRemindersRouteImport.update({
+  id: '/reminders',
+  path: '/reminders',
+  getParentRoute: () => GatedRoute,
+} as any)
+const GatedSpreadsheetsRoute = GatedSpreadsheetsRouteImport.update({
+  id: '/spreadsheets',
+  path: '/spreadsheets',
+  getParentRoute: () => GatedRoute,
+} as any)
+const GatedVercelGithubReposRoute = GatedVercelGithubReposRouteImport.update({
+  id: '/vercel-github-repos',
+  path: '/vercel-github-repos',
+  getParentRoute: () => GatedRoute,
+} as any)
+const GatedWebsitesRoute = GatedWebsitesRouteImport.update({
+  id: '/websites',
+  path: '/websites',
   getParentRoute: () => GatedRoute,
 } as any)
 const GatedWebsitesIdRoute = GatedWebsitesIdRouteImport.update({
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/premium': typeof GatedPremiumRoute
   '/reminders': typeof GatedRemindersRoute
   '/spreadsheets': typeof GatedSpreadsheetsRoute
+  '/vercel-github-repos': typeof GatedVercelGithubReposRoute
   '/websites': typeof GatedWebsitesRouteWithChildren
   '/websites/$id': typeof GatedWebsitesIdRoute
 }
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/premium': typeof GatedPremiumRoute
   '/reminders': typeof GatedRemindersRoute
   '/spreadsheets': typeof GatedSpreadsheetsRoute
+  '/vercel-github-repos': typeof GatedVercelGithubReposRoute
   '/websites': typeof GatedWebsitesRouteWithChildren
   '/websites/$id': typeof GatedWebsitesIdRoute
 }
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/_gated/premium': typeof GatedPremiumRoute
   '/_gated/reminders': typeof GatedRemindersRoute
   '/_gated/spreadsheets': typeof GatedSpreadsheetsRoute
+  '/_gated/vercel-github-repos': typeof GatedVercelGithubReposRoute
   '/_gated/websites': typeof GatedWebsitesRouteWithChildren
   '/_gated/websites/$id': typeof GatedWebsitesIdRoute
 }
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/premium'
     | '/reminders'
     | '/spreadsheets'
+    | '/vercel-github-repos'
     | '/websites'
     | '/websites/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/premium'
     | '/reminders'
     | '/spreadsheets'
+    | '/vercel-github-repos'
     | '/websites'
     | '/websites/$id'
   id:
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/_gated/premium'
     | '/_gated/reminders'
     | '/_gated/spreadsheets'
+    | '/_gated/vercel-github-repos'
     | '/_gated/websites'
     | '/_gated/websites/$id'
   fileRoutesById: FileRoutesById
@@ -149,13 +161,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_gated': {
-      id: '/_gated'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof GatedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -163,39 +168,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_gated/websites': {
-      id: '/_gated/websites'
-      path: '/websites'
-      fullPath: '/websites'
-      preLoaderRoute: typeof GatedWebsitesRouteImport
-      parentRoute: typeof GatedRoute
+    '/_gated': {
+      id: '/_gated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof GatedRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_gated/spreadsheets': {
-      id: '/_gated/spreadsheets'
-      path: '/spreadsheets'
-      fullPath: '/spreadsheets'
-      preLoaderRoute: typeof GatedSpreadsheetsRouteImport
-      parentRoute: typeof GatedRoute
-    }
-    '/_gated/reminders': {
-      id: '/_gated/reminders'
-      path: '/reminders'
-      fullPath: '/reminders'
-      preLoaderRoute: typeof GatedRemindersRouteImport
-      parentRoute: typeof GatedRoute
-    }
-    '/_gated/premium': {
-      id: '/_gated/premium'
-      path: '/premium'
-      fullPath: '/premium'
-      preLoaderRoute: typeof GatedPremiumRouteImport
-      parentRoute: typeof GatedRoute
-    }
-    '/_gated/general-credentials': {
-      id: '/_gated/general-credentials'
-      path: '/general-credentials'
-      fullPath: '/general-credentials'
-      preLoaderRoute: typeof GatedGeneralCredentialsRouteImport
+    '/_gated/audit': {
+      id: '/_gated/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof GatedAuditRouteImport
       parentRoute: typeof GatedRoute
     }
     '/_gated/dashboard': {
@@ -205,11 +189,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GatedDashboardRouteImport
       parentRoute: typeof GatedRoute
     }
-    '/_gated/audit': {
-      id: '/_gated/audit'
-      path: '/audit'
-      fullPath: '/audit'
-      preLoaderRoute: typeof GatedAuditRouteImport
+    '/_gated/general-credentials': {
+      id: '/_gated/general-credentials'
+      path: '/general-credentials'
+      fullPath: '/general-credentials'
+      preLoaderRoute: typeof GatedGeneralCredentialsRouteImport
+      parentRoute: typeof GatedRoute
+    }
+    '/_gated/premium': {
+      id: '/_gated/premium'
+      path: '/premium'
+      fullPath: '/premium'
+      preLoaderRoute: typeof GatedPremiumRouteImport
+      parentRoute: typeof GatedRoute
+    }
+    '/_gated/reminders': {
+      id: '/_gated/reminders'
+      path: '/reminders'
+      fullPath: '/reminders'
+      preLoaderRoute: typeof GatedRemindersRouteImport
+      parentRoute: typeof GatedRoute
+    }
+    '/_gated/spreadsheets': {
+      id: '/_gated/spreadsheets'
+      path: '/spreadsheets'
+      fullPath: '/spreadsheets'
+      preLoaderRoute: typeof GatedSpreadsheetsRouteImport
+      parentRoute: typeof GatedRoute
+    }
+    '/_gated/vercel-github-repos': {
+      id: '/_gated/vercel-github-repos'
+      path: '/vercel-github-repos'
+      fullPath: '/vercel-github-repos'
+      preLoaderRoute: typeof GatedVercelGithubReposRouteImport
+      parentRoute: typeof GatedRoute
+    }
+    '/_gated/websites': {
+      id: '/_gated/websites'
+      path: '/websites'
+      fullPath: '/websites'
+      preLoaderRoute: typeof GatedWebsitesRouteImport
       parentRoute: typeof GatedRoute
     }
     '/_gated/websites/$id': {
@@ -241,6 +260,7 @@ interface GatedRouteChildren {
   GatedPremiumRoute: typeof GatedPremiumRoute
   GatedRemindersRoute: typeof GatedRemindersRoute
   GatedSpreadsheetsRoute: typeof GatedSpreadsheetsRoute
+  GatedVercelGithubReposRoute: typeof GatedVercelGithubReposRoute
   GatedWebsitesRoute: typeof GatedWebsitesRouteWithChildren
 }
 
@@ -251,6 +271,7 @@ const GatedRouteChildren: GatedRouteChildren = {
   GatedPremiumRoute: GatedPremiumRoute,
   GatedRemindersRoute: GatedRemindersRoute,
   GatedSpreadsheetsRoute: GatedSpreadsheetsRoute,
+  GatedVercelGithubReposRoute: GatedVercelGithubReposRoute,
   GatedWebsitesRoute: GatedWebsitesRouteWithChildren,
 }
 
@@ -263,3 +284,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
