@@ -1,4 +1,9 @@
-export type VercelProject = { name: string; domain: string; repository: string | null };
+export type VercelProject = {
+  name: string;
+  domain: string;
+  repository: string | null;
+  landingPages?: { label: string; url: string }[];
+};
 
 // Project directory supplied on 3 October 2026.
 export const vercelProjects: VercelProject[] = [
@@ -381,66 +386,89 @@ export const vercelProjects: VercelProject[] = [
     name: "mercury",
     domain: "mercury-ruddy.vercel.app",
     repository: "m0veproperty/mercury",
+    landingPages: [{ label: "Mercury Command", url: "https://mercury-ruddy.vercel.app/" }],
   },
   {
     name: "al",
     domain: "al-bice-pi.vercel.app",
     repository: "m0veproperty/al",
+    landingPages: [{ label: "Alan Menken", url: "https://al-bice-pi.vercel.app/" }],
   },
   {
     name: "wiwydemo",
     domain: "wiwydemo-livid.vercel.app",
     repository: "m0veproperty/wiwydemo",
+    landingPages: [{ label: "Vectr / WiWY", url: "https://wiwydemo-livid.vercel.app/" }],
   },
   {
     name: "cb",
     domain: "cb-sepia-iota.vercel.app",
     repository: "m0veproperty/cb",
+    landingPages: [{ label: "cb-sepia-iota.vercel.app", url: "https://cb-sepia-iota.vercel.app/" }],
   },
   {
     name: "airplane",
     domain: "airplane-pink.vercel.app",
     repository: "m0veproperty/airplane",
+    landingPages: [{ label: "Aerodynamics", url: "https://airplane-pink.vercel.app/" }],
   },
   {
     name: "evolveit",
     domain: "evolveit-sand.vercel.app",
     repository: "m0veproperty/evolveit",
+    landingPages: [{ label: "Evolveit", url: "https://evolveit-sand.vercel.app/" }],
   },
   {
     name: "sr",
     domain: "sr-nine-olive.vercel.app",
     repository: "m0veproperty/sr",
+    landingPages: [
+      { label: "Slider Revolution: Carousel Pack", url: "https://sr-nine-olive.vercel.app/" },
+      {
+        label: "Slider Revolution: Korr",
+        url: "https://sr-nine-olive.vercel.app/korr-artistic-horizontal-portfolio-carousel/",
+      },
+      {
+        label: "Slider Revolution: Filmstrip Hero",
+        url: "https://sr-nine-olive.vercel.app/filmstrip-hero-3d-image-carousel-collection/",
+      },
+    ],
   },
   {
     name: "knight",
     domain: "knight-eta.vercel.app",
     repository: "m0veproperty/knight",
+    landingPages: [{ label: "Scale & Form", url: "https://knight-eta.vercel.app/" }],
   },
   {
     name: "expo",
     domain: "expo-ten-phi.vercel.app",
     repository: "m0veproperty/expo",
+    landingPages: [{ label: "DMLA: Dans tes yeux", url: "https://expo-ten-phi.vercel.app/" }],
   },
   {
     name: "jazz",
     domain: "jazz-flax.vercel.app",
     repository: "m0veproperty/jazz",
+    landingPages: [{ label: "Jasmina Denner", url: "https://jazz-flax.vercel.app/" }],
   },
   {
     name: "i3",
     domain: "i3-theta.vercel.app",
     repository: "m0veproperty/i3",
+    landingPages: [{ label: "i3MEDIA", url: "https://i3-theta.vercel.app/" }],
   },
   {
     name: "chance",
     domain: "chance-lemon.vercel.app",
     repository: "m0veproperty/chance",
+    landingPages: [{ label: "Ricardo Chance", url: "https://chance-lemon.vercel.app/" }],
   },
   {
     name: "hotel",
     domain: "hotel-rose-alpha.vercel.app",
     repository: "m0veproperty/hotel",
+    landingPages: [{ label: "Tandjung Sari Hotel", url: "https://hotel-rose-alpha.vercel.app/" }],
   },
   {
     name: "focus-cpanel",
@@ -456,36 +484,43 @@ export const vercelProjects: VercelProject[] = [
     name: "linearity",
     domain: "linearity-mu.vercel.app",
     repository: "m0veproperty/linearity",
+    landingPages: [{ label: "Linearity", url: "https://linearity-mu.vercel.app/" }],
   },
   {
     name: "getedu",
     domain: "getedu.vercel.app",
     repository: "m0veproperty/getedu",
+    landingPages: [{ label: "Getty: Tracing Art", url: "https://getedu.vercel.app/tracingart/" }],
   },
   {
     name: "zc",
     domain: "zc-seven-beige.vercel.app",
     repository: "m0veproperty/zc",
+    landingPages: [{ label: "Zerocircle", url: "https://zc-seven-beige.vercel.app/" }],
   },
   {
     name: "mf",
     domain: "mf-alpha-eight.vercel.app",
     repository: "m0veproperty/mf",
+    landingPages: [{ label: "Montfort", url: "https://mf-alpha-eight.vercel.app/" }],
   },
   {
     name: "fof",
     domain: "fof-three.vercel.app",
     repository: "m0veproperty/fof",
+    landingPages: [{ label: "Future of Finance", url: "https://fof-three.vercel.app/" }],
   },
   {
     name: "uc",
     domain: "uc-three-sable.vercel.app",
     repository: "m0veproperty/uc",
+    landingPages: [{ label: "United Carriers", url: "https://uc-three-sable.vercel.app/" }],
   },
   {
     name: "alkemy",
     domain: "alkemy-rho.vercel.app",
     repository: "m0veproperty/alkemy",
+    landingPages: [{ label: "Alkemy", url: "https://alkemy-rho.vercel.app/" }],
   },
   {
     name: "promptgenerator-cpanel",
@@ -496,6 +531,7 @@ export const vercelProjects: VercelProject[] = [
     name: "khanhnguyen",
     domain: "khanhnguyen-two.vercel.app",
     repository: "m0veproperty/khanhnguyen",
+    landingPages: [{ label: "Khanh Nguyen", url: "https://khanhnguyen-two.vercel.app/" }],
   },
   {
     name: "zero",
@@ -511,6 +547,7 @@ export const vercelProjects: VercelProject[] = [
     name: "souffletmalt",
     domain: "souffletmalt-liard.vercel.app",
     repository: "m0veproperty/souffletmalt",
+    landingPages: [{ label: "Soufflet Malt", url: "https://souffletmalt-liard.vercel.app/" }],
   },
   {
     name: "invoicewiwy-cpanel",
@@ -536,6 +573,7 @@ export const vercelProjects: VercelProject[] = [
     name: "lama",
     domain: "lama-ochre.vercel.app",
     repository: "m0veproperty/lama",
+    landingPages: [{ label: "Lama Lama", url: "https://lama-ochre.vercel.app/" }],
   },
   {
     name: "figma-cpanel",
@@ -566,11 +604,13 @@ export const vercelProjects: VercelProject[] = [
     name: "jeff",
     domain: "jeff-beryl.vercel.app",
     repository: "m0veproperty/jeff",
+    landingPages: [{ label: "Jeff Milanes", url: "https://jeff-beryl.vercel.app/" }],
   },
   {
     name: "kaolin",
     domain: "kaolin-lyart.vercel.app",
     repository: "m0veproperty/kaolin",
+    landingPages: [{ label: "Sedlecky Kaolin", url: "https://kaolin-lyart.vercel.app/" }],
   },
   {
     name: "simmernotes",
@@ -596,9 +636,15 @@ export const assetSections = [
     description: "All other websites, tools and deployments.",
   },
   { id: "pbn", label: "PBN Assets", description: "PBN websites and supporting tools." },
+  {
+    id: "templates",
+    label: "Website Templates",
+    description: "Website templates and landing-page examples, with their source repositories.",
+  },
 ] as const;
 export type AssetSectionId = (typeof assetSections)[number]["id"];
 export function getAssetSection(project: VercelProject): AssetSectionId {
+  if (project.landingPages?.length) return "templates";
   const name = `${project.name} ${project.domain} ${project.repository ?? ""}`.toLowerCase();
   const compactName = name.replace(/[^a-z0-9]/g, "");
   if (name.includes("facf") || compactName.includes("findacheapflight")) return "facf";

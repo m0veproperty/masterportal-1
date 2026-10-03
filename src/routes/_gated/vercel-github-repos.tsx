@@ -29,9 +29,10 @@ function Page() {
   const [sort, setSort] = useState("original");
   const query = search.trim().toLowerCase();
   const filtered = vercelProjects.filter((project) => {
-    const matchesSearch = `${project.name} ${project.domain} ${project.repository ?? ""}`
-      .toLowerCase()
-      .includes(query);
+    const matchesSearch =
+      `${project.name} ${project.domain} ${project.repository ?? ""} ${project.landingPages?.map((page) => `${page.label} ${page.url}`).join(" ") ?? ""}`
+        .toLowerCase()
+        .includes(query);
     const matchesConnection =
       connection === "all" ||
       (connection === "connected" ? !!project.repository : !project.repository);
@@ -208,15 +209,30 @@ function ProjectTable({ projects, label }: { projects: VercelProject[]; label: s
                 {project.name}
               </th>
               <td className="px-4 py-4 align-top">
-                <a
-                  href={`https://${project.domain}/`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={externalLinkClass}
-                >
-                  {project.domain}
-                  <ExternalLink className="w-3 h-3 shrink-0" aria-hidden="true" />
-                </a>
+                <div className="space-y-3">
+                  {(
+                    project.landingPages ?? [
+                      { label: project.domain, url: `https://${project.domain}/` },
+                    ]
+                  ).map((page) => (
+                    <div key={page.url}>
+                      <a
+                        href={page.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={externalLinkClass}
+                      >
+                        {page.label}
+                        <ExternalLink className="w-3 h-3 shrink-0" aria-hidden="true" />
+                      </a>
+                      {project.landingPages && (
+                        <div className="mt-1 text-xs text-muted-foreground break-all">
+                          {page.url.replace(/^https:\/\//, "")}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </td>
               <td className="px-4 py-4 align-top">
                 {project.repository ? (
