@@ -1,7 +1,19 @@
 import { Link, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useState, type ReactNode } from "react";
-import { Globe, LayoutDashboard, KeyRound, Star, FileSpreadsheet, Bell, ScrollText, LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import {
+  GitBranch,
+  Globe,
+  LayoutDashboard,
+  KeyRound,
+  Star,
+  FileSpreadsheet,
+  Bell,
+  ScrollText,
+  LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
+} from "lucide-react";
 import { lockPortal } from "@/lib/gate.functions";
 
 const nav = [
@@ -9,6 +21,7 @@ const nav = [
   { to: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
   { to: "/general-credentials", label: "General credentials", Icon: KeyRound },
   { to: "/premium", label: "Premium domains", Icon: Star },
+  { to: "/vercel-github-repos", label: "Vercel & GitHub Repos", Icon: GitBranch },
   { to: "/spreadsheets", label: "Spreadsheets", Icon: FileSpreadsheet },
   { to: "/reminders", label: "Reminders", Icon: Bell },
   { to: "/audit", label: "Activity log", Icon: ScrollText },
@@ -35,7 +48,9 @@ export function AppShell({
     await router.navigate({ to: "/" });
   }
   return (
-    <div className={`min-h-screen grid ${collapsed ? "grid-cols-[65px_1fr]" : "grid-cols-[234px_1fr]"} transition-[grid-template-columns] duration-200`}>
+    <div
+      className={`min-h-screen grid ${collapsed ? "grid-cols-[65px_1fr]" : "grid-cols-[234px_1fr]"} transition-[grid-template-columns] duration-200`}
+    >
       <aside
         className="text-sidebar-foreground border-r border-sidebar-border sticky top-0 h-screen flex flex-col"
         style={{ backgroundColor: SIDEBAR_BG }}
@@ -54,10 +69,14 @@ export function AppShell({
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
-            {collapsed ? <PanelLeftOpen className="h-[18px] w-[18px]" /> : <PanelLeftClose className="h-[18px] w-[18px]" />}
+            {collapsed ? (
+              <PanelLeftOpen className="h-[18px] w-[18px]" />
+            ) : (
+              <PanelLeftClose className="h-[18px] w-[18px]" />
+            )}
           </button>
         </div>
-        <nav className="flex-1 p-[10.8px] space-y-[3.6px]">
+        <nav className="flex-1 min-h-0 overflow-y-auto p-[10.8px] space-y-[3.6px]">
           {nav.map(({ to, label, Icon }) => (
             <Link
               key={to}
@@ -85,8 +104,8 @@ export function AppShell({
         <div className="portal-stage flex-1 min-w-0 p-5 md:p-6">
           {!hideTitle && (
             <div className="mb-4 flex items-center justify-between gap-4">
-            <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
-            <div className="flex items-center gap-3">{actions}</div>
+              <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
+              <div className="flex items-center gap-3">{actions}</div>
             </div>
           )}
           {children}
