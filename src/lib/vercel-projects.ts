@@ -572,4 +572,44 @@ export const vercelProjects: VercelProject[] = [
     domain: "kaolin-lyart.vercel.app",
     repository: "m0veproperty/kaolin",
   },
+  {
+    name: "simmernotes",
+    domain: "simmernotes.vercel.app",
+    repository: "m0veproperty/pbn-simmernotes",
+  },
 ];
+
+export const assetSections = [
+  {
+    id: "wiwy",
+    label: "WiWY Assets",
+    description: "Projects connected to a custom wiwy.com subdomain.",
+  },
+  {
+    id: "facf",
+    label: "Find A Cheap Flight",
+    description: "Projects featuring FACF or Find A Cheap Flight in their name.",
+  },
+  {
+    id: "other",
+    label: "Everything Else",
+    description: "All other websites, tools and deployments.",
+  },
+  { id: "pbn", label: "PBN Assets", description: "PBN websites and supporting tools." },
+] as const;
+export type AssetSectionId = (typeof assetSections)[number]["id"];
+export function getAssetSection(project: VercelProject): AssetSectionId {
+  const name = `${project.name} ${project.domain} ${project.repository ?? ""}`.toLowerCase();
+  const compactName = name.replace(/[^a-z0-9]/g, "");
+  if (name.includes("facf") || compactName.includes("findacheapflight")) return "facf";
+  if (project.domain.toLowerCase().endsWith(".wiwy.com")) return "wiwy";
+  if (
+    project.repository
+      ?.toLowerCase()
+      .split("/")
+      .pop()
+      ?.match(/^pbn(?:-|$)/)
+  )
+    return "pbn";
+  return "other";
+}

@@ -2,7 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { ExternalLink, GitBranch, Globe, Search, Triangle } from "lucide-react";
 import { AppShell } from "@/components/portal/AppShell";
-import { vercelProjects } from "@/lib/vercel-projects";
+import {
+  assetSections,
+  getAssetSection,
+  vercelProjects,
+  type VercelProject,
+} from "@/lib/vercel-projects";
 
 export const Route = createFileRoute("/_gated/vercel-github-repos")({
   head: () => ({
@@ -63,6 +68,20 @@ function Page() {
           </div>
         ))}
       </div>
+      <nav aria-label="Asset sections" className="flex flex-wrap gap-2 mb-6">
+        {assetSections.map((section) => (
+          <a
+            key={section.id}
+            href={`#assets-${section.id}`}
+            className="inline-flex items-center gap-2 rounded-md bg-card border border-border px-3 py-2 text-sm font-medium hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring"
+          >
+            {section.label}
+            <span className="text-xs text-muted-foreground tabular-nums">
+              {vercelProjects.filter((project) => getAssetSection(project) === section.id).length}
+            </span>
+          </a>
+        ))}
+      </nav>
       <div className="bg-card border border-border rounded-xl overflow-hidden">
         <div className="p-4 flex flex-wrap items-end gap-4 border-b border-border">
           <div className="flex-1 min-w-48">
@@ -117,91 +136,127 @@ function Page() {
         <div className="px-4 py-3 text-xs text-muted-foreground" role="status">
           Showing {projects.length} of {vercelProjects.length} projects
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <caption className="sr-only">
-              Vercel projects and their live websites and connected GitHub repositories
-            </caption>
-            <thead className="bg-muted/60 text-xs text-muted-foreground">
-              <tr>
-                <th scope="col" className="px-4 py-3 font-medium">
-                  Project
-                </th>
-                <th scope="col" className="px-4 py-3 font-medium">
-                  Live website
-                </th>
-                <th scope="col" className="px-4 py-3 font-medium">
-                  GitHub repository
-                </th>
-                <th scope="col" className="px-4 py-3 font-medium">
-                  Vercel
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {projects.map((project) => (
-                <tr
-                  key={project.domain}
-                  className="border-t border-border even:bg-muted/25 hover:bg-muted/50"
-                >
-                  <th scope="row" className="px-4 py-4 align-top font-semibold">
-                    {project.name}
-                  </th>
-                  <td className="px-4 py-4 align-top">
-                    <a
-                      href={`https://${project.domain}/`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={externalLinkClass}
-                    >
-                      {project.domain}
-                      <ExternalLink className="w-3 h-3 shrink-0" aria-hidden="true" />
-                    </a>
-                  </td>
-                  <td className="px-4 py-4 align-top">
-                    {project.repository ? (
-                      <a
-                        href={`https://github.com/${project.repository}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={externalLinkClass}
-                      >
-                        <GitBranch className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                        {project.repository}
-                        <ExternalLink className="w-3 h-3 shrink-0" aria-hidden="true" />
-                      </a>
-                    ) : (
-                      <span className="text-xs text-muted-foreground">No repository connected</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-4 align-top">
-                    <a
-                      href={`https://vercel.com/wi-wy/${project.name}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`${externalLinkClass} whitespace-nowrap`}
-                      aria-label={`Manage ${project.name} in Vercel`}
-                    >
-                      Manage project
-                      <ExternalLink className="w-3 h-3" aria-hidden="true" />
-                    </a>
-                  </td>
-                </tr>
-              ))}
-              {projects.length === 0 && (
-                <tr>
-                  <td colSpan={4} className="px-4 py-12 text-center text-muted-foreground">
-                    No projects match your search or filter.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+        <div className="space-y-6 p-4">
+          {assetSections.map((section) => {
+            const sectionProjects = projects.filter(
+              (project) => getAssetSection(project) === section.id,
+            );
+            const total = vercelProjects.filter(
+              (project) => getAssetSection(project) === section.id,
+            ).length;
+            return (
+              <section
+                key={section.id}
+                id={`assets-${section.id}`}
+                aria-labelledby={`heading-${section.id}`}
+                className="scroll-mt-6 border border-border rounded-xl overflow-hidden"
+              >
+                <div className="px-4 py-4 bg-muted/30 border-b border-border">
+                  <div className="flex items-center justify-between gap-3">
+                    <h2 id={`heading-${section.id}`} className="text-base font-semibold">
+                      {section.label}
+                    </h2>
+                    <span className="text-xs text-muted-foreground tabular-nums">
+                      {sectionProjects.length} of {total} projects
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">{section.description}</p>
+                </div>
+                <ProjectTable projects={sectionProjects} label={section.label} />
+              </section>
+            );
+          })}
         </div>
         <div className="px-4 py-3 border-t border-border text-xs text-muted-foreground">
           Directory added 3 October 2026.
         </div>
       </div>
     </AppShell>
+  );
+}
+
+function ProjectTable({ projects, label }: { projects: VercelProject[]; label: string }) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-left text-sm">
+        <caption className="sr-only">
+          {label}: live websites and connected GitHub repositories
+        </caption>
+        <thead className="bg-muted/60 text-xs text-muted-foreground">
+          <tr>
+            <th scope="col" className="px-4 py-3 font-medium">
+              Project
+            </th>
+            <th scope="col" className="px-4 py-3 font-medium">
+              Live website
+            </th>
+            <th scope="col" className="px-4 py-3 font-medium">
+              GitHub repository
+            </th>
+            <th scope="col" className="px-4 py-3 font-medium">
+              Vercel
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {projects.map((project) => (
+            <tr
+              key={project.domain}
+              className="border-t border-border even:bg-muted/25 hover:bg-muted/50"
+            >
+              <th scope="row" className="px-4 py-4 align-top font-semibold">
+                {project.name}
+              </th>
+              <td className="px-4 py-4 align-top">
+                <a
+                  href={`https://${project.domain}/`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={externalLinkClass}
+                >
+                  {project.domain}
+                  <ExternalLink className="w-3 h-3 shrink-0" aria-hidden="true" />
+                </a>
+              </td>
+              <td className="px-4 py-4 align-top">
+                {project.repository ? (
+                  <a
+                    href={`https://github.com/${project.repository}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={externalLinkClass}
+                  >
+                    <GitBranch className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                    {project.repository}
+                    <ExternalLink className="w-3 h-3 shrink-0" aria-hidden="true" />
+                  </a>
+                ) : (
+                  <span className="text-xs text-muted-foreground">No repository connected</span>
+                )}
+              </td>
+              <td className="px-4 py-4 align-top">
+                <a
+                  href={`https://vercel.com/wi-wy/${project.name}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${externalLinkClass} whitespace-nowrap`}
+                  aria-label={`Manage ${project.name} in Vercel`}
+                >
+                  Manage project
+                  <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                </a>
+              </td>
+            </tr>
+          ))}
+          {projects.length === 0 && (
+            <tr>
+              <td colSpan={4} className="px-4 py-12 text-center text-muted-foreground">
+                No projects in this section match your search or filter.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 }
