@@ -17,6 +17,7 @@ import { Route as GatedGeneralCredentialsRouteImport } from './routes/_gated/gen
 import { Route as GatedPremiumRouteImport } from './routes/_gated/premium'
 import { Route as GatedRemindersRouteImport } from './routes/_gated/reminders'
 import { Route as GatedSpreadsheetsRouteImport } from './routes/_gated/spreadsheets'
+import { Route as GatedToolsRouteImport } from './routes/_gated/tools'
 import { Route as GatedVercelGithubReposRouteImport } from './routes/_gated/vercel-github-repos'
 import { Route as GatedWebsitesRouteImport } from './routes/_gated/websites'
 import { Route as GatedWebsitesIdRouteImport } from './routes/_gated/websites.$id'
@@ -60,6 +61,11 @@ const GatedSpreadsheetsRoute = GatedSpreadsheetsRouteImport.update({
   path: '/spreadsheets',
   getParentRoute: () => GatedRoute,
 } as any)
+const GatedToolsRoute = GatedToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
+  getParentRoute: () => GatedRoute,
+} as any)
 const GatedVercelGithubReposRoute = GatedVercelGithubReposRouteImport.update({
   id: '/vercel-github-repos',
   path: '/vercel-github-repos',
@@ -84,6 +90,7 @@ export interface FileRoutesByFullPath {
   '/premium': typeof GatedPremiumRoute
   '/reminders': typeof GatedRemindersRoute
   '/spreadsheets': typeof GatedSpreadsheetsRoute
+  '/tools': typeof GatedToolsRoute
   '/vercel-github-repos': typeof GatedVercelGithubReposRoute
   '/websites': typeof GatedWebsitesRouteWithChildren
   '/websites/$id': typeof GatedWebsitesIdRoute
@@ -96,6 +103,7 @@ export interface FileRoutesByTo {
   '/premium': typeof GatedPremiumRoute
   '/reminders': typeof GatedRemindersRoute
   '/spreadsheets': typeof GatedSpreadsheetsRoute
+  '/tools': typeof GatedToolsRoute
   '/vercel-github-repos': typeof GatedVercelGithubReposRoute
   '/websites': typeof GatedWebsitesRouteWithChildren
   '/websites/$id': typeof GatedWebsitesIdRoute
@@ -110,6 +118,7 @@ export interface FileRoutesById {
   '/_gated/premium': typeof GatedPremiumRoute
   '/_gated/reminders': typeof GatedRemindersRoute
   '/_gated/spreadsheets': typeof GatedSpreadsheetsRoute
+  '/_gated/tools': typeof GatedToolsRoute
   '/_gated/vercel-github-repos': typeof GatedVercelGithubReposRoute
   '/_gated/websites': typeof GatedWebsitesRouteWithChildren
   '/_gated/websites/$id': typeof GatedWebsitesIdRoute
@@ -124,6 +133,7 @@ export interface FileRouteTypes {
     | '/premium'
     | '/reminders'
     | '/spreadsheets'
+    | '/tools'
     | '/vercel-github-repos'
     | '/websites'
     | '/websites/$id'
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/premium'
     | '/reminders'
     | '/spreadsheets'
+    | '/tools'
     | '/vercel-github-repos'
     | '/websites'
     | '/websites/$id'
@@ -149,6 +160,7 @@ export interface FileRouteTypes {
     | '/_gated/premium'
     | '/_gated/reminders'
     | '/_gated/spreadsheets'
+    | '/_gated/tools'
     | '/_gated/vercel-github-repos'
     | '/_gated/websites'
     | '/_gated/websites/$id'
@@ -217,6 +229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GatedSpreadsheetsRouteImport
       parentRoute: typeof GatedRoute
     }
+    '/_gated/tools': {
+      id: '/_gated/tools'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof GatedToolsRouteImport
+      parentRoute: typeof GatedRoute
+    }
     '/_gated/vercel-github-repos': {
       id: '/_gated/vercel-github-repos'
       path: '/vercel-github-repos'
@@ -260,6 +279,7 @@ interface GatedRouteChildren {
   GatedPremiumRoute: typeof GatedPremiumRoute
   GatedRemindersRoute: typeof GatedRemindersRoute
   GatedSpreadsheetsRoute: typeof GatedSpreadsheetsRoute
+  GatedToolsRoute: typeof GatedToolsRoute
   GatedVercelGithubReposRoute: typeof GatedVercelGithubReposRoute
   GatedWebsitesRoute: typeof GatedWebsitesRouteWithChildren
 }
@@ -271,6 +291,7 @@ const GatedRouteChildren: GatedRouteChildren = {
   GatedPremiumRoute: GatedPremiumRoute,
   GatedRemindersRoute: GatedRemindersRoute,
   GatedSpreadsheetsRoute: GatedSpreadsheetsRoute,
+  GatedToolsRoute: GatedToolsRoute,
   GatedVercelGithubReposRoute: GatedVercelGithubReposRoute,
   GatedWebsitesRoute: GatedWebsitesRouteWithChildren,
 }

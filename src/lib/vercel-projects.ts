@@ -283,19 +283,9 @@ export const vercelProjects: VercelProject[] = [
     repository: "m0veproperty/WiWyBuilder2",
   },
   {
-    name: "wiwy-web-builder",
-    domain: "wb.wiwy.com",
-    repository: "m0veproperty/wiwy-web-builder",
-  },
-  {
     name: "m0ve-hyper3d-android-20261003",
     domain: "m0ve-hyper3d-android-20261003.vercel.app",
     repository: null,
-  },
-  {
-    name: "projectm",
-    domain: "pm.wiwy.com",
-    repository: "m0veproperty/projectm",
   },
   {
     name: "m0ve-intelligence-studio-20261002",
@@ -311,21 +301,6 @@ export const vercelProjects: VercelProject[] = [
     name: "website-builder-knowledge-library",
     domain: "website-builder-knowledge-library.vercel.app",
     repository: "m0veproperty/website-builder-knowledge-library",
-  },
-  {
-    name: "wiwyinbox",
-    domain: "inbox.wiwy.com",
-    repository: "m0veproperty/wiwyinbox",
-  },
-  {
-    name: "masterportal",
-    domain: "mp.wiwy.com",
-    repository: "m0veproperty/masterportal-1",
-  },
-  {
-    name: "mx-data-analytics",
-    domain: "mx-analytics.wiwy.com",
-    repository: null,
   },
   {
     name: "affiliate-websites",
@@ -523,11 +498,6 @@ export const vercelProjects: VercelProject[] = [
     landingPages: [{ label: "Alkemy", url: "https://alkemy-rho.vercel.app/" }],
   },
   {
-    name: "promptgenerator-cpanel",
-    domain: "prompthub.wiwy.com",
-    repository: "m0veproperty/promptgenerator-cpanel",
-  },
-  {
     name: "khanhnguyen",
     domain: "khanhnguyen-two.vercel.app",
     repository: "m0veproperty/khanhnguyen",
@@ -539,30 +509,15 @@ export const vercelProjects: VercelProject[] = [
     repository: "m0veproperty/zero",
   },
   {
-    name: "promptstudio-cpanel",
-    domain: "prompt-studio.wiwy.com",
-    repository: "m0veproperty/promptstudio-cpanel",
-  },
-  {
     name: "souffletmalt",
     domain: "souffletmalt-liard.vercel.app",
     repository: "m0veproperty/souffletmalt",
     landingPages: [{ label: "Soufflet Malt", url: "https://souffletmalt-liard.vercel.app/" }],
   },
   {
-    name: "invoicewiwy-cpanel",
-    domain: "invoice.wiwy.com",
-    repository: "m0veproperty/invoicewiwy-cpanel",
-  },
-  {
     name: "b-linbox-cpanel",
     domain: "inbox.britishlasers.com",
     repository: "m0veproperty/BLinbox-cpanel",
-  },
-  {
-    name: "viewport-sync",
-    domain: "inspect.wiwy.com",
-    repository: null,
   },
   {
     name: "figma",
@@ -581,11 +536,6 @@ export const vercelProjects: VercelProject[] = [
     repository: "m0veproperty/figma-cpanel",
   },
   {
-    name: "fotor-wiwy",
-    domain: "fotor.wiwy.com",
-    repository: "m0veproperty/panel-express",
-  },
-  {
     name: "siteguard-vault",
     domain: "siteguard-vault.vercel.app",
     repository: null,
@@ -594,11 +544,6 @@ export const vercelProjects: VercelProject[] = [
     name: "pixel-perfect",
     domain: "pixel-perfect-swart-pi.vercel.app",
     repository: null,
-  },
-  {
-    name: "screen-wiwy",
-    domain: "screen.wiwy.com",
-    repository: "m0veproperty/bb-ai-agents",
   },
   {
     name: "jeff",
@@ -620,11 +565,6 @@ export const vercelProjects: VercelProject[] = [
 ];
 
 export const assetSections = [
-  {
-    id: "wiwy",
-    label: "WiWY Assets",
-    description: "Projects connected to a custom wiwy.com subdomain.",
-  },
   {
     id: "facf",
     label: "Find A Cheap Flight",
@@ -648,7 +588,6 @@ export function getAssetSection(project: VercelProject): AssetSectionId {
   const name = `${project.name} ${project.domain} ${project.repository ?? ""}`.toLowerCase();
   const compactName = name.replace(/[^a-z0-9]/g, "");
   if (name.includes("facf") || compactName.includes("findacheapflight")) return "facf";
-  if (project.domain.toLowerCase().endsWith(".wiwy.com")) return "wiwy";
   if (
     project.repository
       ?.toLowerCase()

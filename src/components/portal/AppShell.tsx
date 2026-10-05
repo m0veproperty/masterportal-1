@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState, type ReactNode } from "react";
 import {
   GitBranch,
+  Wrench,
   Globe,
   LayoutDashboard,
   KeyRound,
@@ -21,6 +22,7 @@ const nav = [
   { to: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
   { to: "/general-credentials", label: "General credentials", Icon: KeyRound },
   { to: "/premium", label: "Premium domains", Icon: Star },
+  { to: "/tools", label: "Tools", Icon: Wrench },
   { to: "/vercel-github-repos", label: "Vercel & GitHub Repos", Icon: GitBranch },
   { to: "/spreadsheets", label: "Spreadsheets", Icon: FileSpreadsheet },
   { to: "/reminders", label: "Reminders", Icon: Bell },
