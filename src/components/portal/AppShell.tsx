@@ -60,9 +60,11 @@ export function AppShell({
         <div className="relative p-[10.8px] border-b border-sidebar-border flex items-center justify-between gap-[7.2px]">
           {!collapsed && (
             <img
-              src="/favicon.jpg"
-              alt="Master Portal"
-              className="h-36 w-36 rounded-[10.8px] object-cover shadow-lg mx-auto md:h-[14.85rem] md:w-[14.85rem]"
+              src="/wiwy-logo-transparent.webp"
+              alt="WiWY"
+              width={1254}
+              height={1254}
+              className="w-full max-w-[200px] h-auto object-contain mx-auto"
             />
           )}
           <button
